@@ -13,5 +13,7 @@ namespace CrudMVC7.Data
 
         // Here are all the models
 
+        DbSet<Contact> Contacts { get; set; }
+
     }
 }
