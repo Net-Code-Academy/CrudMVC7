@@ -1,0 +1,98 @@
+﻿@model Contact;
+@{
+    ViewData["Title"] = "Editar paciente";
+}
+
+<br />
+<div class="row">
+    <div class="offset-12">
+        <div class="card border">
+            <div class="card-header bg-warning">
+                <h3 class="text-white text-center">
+                    <strong>Editar Paciente</strong>
+                </h3>
+
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <!-- Campo oculto-->
+                    <input type="hidden" asp-for="ContactId" />
+
+                    <div asp-asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Nombres</label>
+                                <input asp-for="Name" class="form-control font-weight-bold" placeholder="Ingresa el nombre" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Apellido Paterno</label>
+                                <input asp-for="LastName" class="form-control" placeholder="Ingresa el apellido paterno" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Apellido Materno</label>
+                                <input asp-for="MotherLastName" class="form-control font-weight-bold" placeholder="Ingresa el apellido materno" />
+                                <span asp-validation-for="MotherLastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Celular</label>
+                                <input asp-for="MobilePhone" class="form-control" placeholder="Ingresa el celular" oninput="this.value = this.value.replace(/[^0-9]/g,'')" />
+                                <span asp-validation-for="MobilePhone" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Fecha de Nacimiento</label>
+                                <input asp-for="BirthDate" class="form-control font-weight-bold" />
+                                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Direccion</label>
+                                <input asp-for="Direccion" class="form-control" placeholder="Ingresa la dirección" />
+                                <span asp-validation-for="Direccion" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <div class="row justify-content-center">
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-warning d-block mx-auto fw-bold">
+                                    Editar
+                                </button>
+                            </div>
+                            <div class="col-auto">
+                                <a href="@Url.Action("Index", "Home")" class="btn btn-danger fw-bold">Volver</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

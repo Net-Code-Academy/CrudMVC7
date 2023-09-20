@@ -1,0 +1,235 @@
+﻿@model IEnumerable<Contact>;
+@{
+    ViewData["Title"] = "Detalle de Paciente";
+    DateTime fechaActual = DateTime.Now;
+    string fechaFormateada = fechaActual.ToString("dd/MM/yyyy");
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card border">
+            <div class="card-header bg-dark">
+                <h3 class="text-white text-center">
+                    <strong>Detalle de Paciente</strong>
+                </h3>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                <button type="button" class="btn btn-success" title="Exportar a Excel" id="btnExportDetail" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                    <i class="fa-solid fa-file-csv"></i> Exportar en Excel
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive mt-2">
+
+                @if (Model.Count() > 0)
+                {
+                    <table class="table table-striped" id="tablaDetalles" width="100%" cellspacing="0">
+                        <thead >
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                                <th>Apellido Paterno</th>
+                                <th>Apellido Materno</th>
+                                <th>Vacuna</th>
+                                <th>Fecha prevista</th>
+                                <th>Fecha de aplicación</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var contact in Model)
+                            {
+                                foreach(var immunization in contact.ImmunizationPatients)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(m => immunization.Id)</td>
+                                        <td>@Html.DisplayFor(m => contact.Name)</td>
+                                        <td>@Html.DisplayFor(m => contact.LastName)</td>
+                                        <td>@Html.DisplayFor(m => contact.MotherLastName)</td>
+                                        <td>@Html.DisplayFor(m => immunization.Immunization.Name)</td>
+                                        <td>@immunization.ScheduledDate.ToString("dd/MM/yyyy")</td>
+                                        <td>@Html.DisplayFor(m => immunization.ApplicationDate)</td>
+                                        @if (immunization.State != "pendiente")
+                                        {
+                                            <td class="link-primary fw-bold">@Html.DisplayFor(m => immunization.State)</td>
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            @if (fechaActual < immunization.ScheduledDate)
+                                            {
+                                                <td class="link-success fw-bold">Dentro de plazo</td>
+
+                                            }
+                                            else if (fechaFormateada == immunization.ScheduledDate.ToString("dd/MM/yyyy"))
+                                            {
+                                                <td class="link-warning fw-bold">efectuar hoy</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="link-danger fw-bold">Caducado</td>
+                                            }
+                                            <td>
+                                                <button class="btn btn-primary abrir-modal" data-id="@immunization.Id">Abrir Modal</button>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>No hay registros</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row justify-content-end">
+        <div class="col-auto">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-danger fw-bold">Volver</a>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="modalVacuna" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title" id="modalLabel">Confirmar vacuna</h5>
+                <button type="button" class="btn-outline-white" data-dismiss="modal" aria-label="Close" onclick="cerrarModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro que deseas cambiar el estado de la vacuna?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cerrarModal()">Cancelar</button>
+                <button id="btnAceptar" type="button" class="btn btn-warning">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            //Llamar a datatable
+            $('#tablaDetalles').DataTable({
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#btnExportDetail").click(function () {
+
+                // Obtener la tabla
+                let table = document.getElementById("tablaDetalles");
+
+
+                // Crear una tabla vacía para almacenar los valores que deseamos exportar
+                let exportTable = document.createElement("table");
+                exportTable.innerHTML = table.innerHTML;
+
+                // Indicamos el indice de la columna que no queremos exportar
+                let columnasEliminar = [8];
+
+                // Eliminamos la columna indicada
+                for (let i = columnasEliminar.length - 1; i >= 0; i--) {
+                    let colIndex = columnasEliminar[i];
+                    for (let j = 0; j < exportTable.rows.length; j++) {
+                        exportTable.rows[j].deleteCell(colIndex);
+                    }
+                }
+
+                // Utilizar TableToExcel para exportar la tabla modificada
+                TableToExcel.convert(exportTable, {
+                    name: `DetalleVacunas.xlsx`,
+                    sheet: {
+                        name: 'Programación'
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#botonAbrirModal').click(function () {
+                $('#miModal').modal('show');
+            });
+        });
+    </script>
+
+    <script>
+        function cerrarModal() {
+            $('#modalVacuna').modal('hide');
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var miTabla = $('#tablaDetalles').DataTable();
+            $('#tablaDetalles tbody').on('click', 'tr', function () {
+                debugger;
+                var data = miTabla.row(this).data();
+                var id = data[0]; // Supongamos que el ID está en la primera columna
+                abrirModal(id);
+            });
+
+            function abrirModal(id) {
+                // Abre la modal aquí y pasa el ID como parámetro
+                $('#modalVacuna').modal('show');
+
+                $('#btnAceptar').click(function () {
+                    // Llama al método POST del controlador con el ID
+                    $.post("/Immunization/Edit", { id: id })
+                        .done(function (data) {
+                            // Maneja la respuesta del servidor, si es necesario
+                            location.reload();
+                        })
+                        .fail(function (error) {
+                            // Maneja errores, si los hay
+                            console.error(error);
+                        });
+
+                    // Cierra la modal después de hacer clic en "Aceptar"
+                    $('#modalVacuna').modal('hide');
+                });
+            }
+        });
+    </script>
+
+}
+

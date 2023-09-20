@@ -1,0 +1,90 @@
+﻿@model IEnumerable<ImmunizationPatient>;
+@{
+    ViewData["Title"] = "Editar paciente";
+}
+
+<h5>EDITAR VACUNA</h5>
+@*<br />
+<div class="row">
+    <div class="offset-12">
+        <div class="card border">
+            <div class="card-header bg-warning">
+                <h3 class="text-white text-center">
+                    <strong>Registrar Vacuna</strong>
+                </h3>
+
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <!-- Campo oculto-->
+                    <input type="hidden" asp-for="Id" />
+
+                    <div asp-asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Nombres</label>
+                                <input asp-for="@Model.Contact.Name" class="form-control font-weight-bold" placeholder="Ingresa el nombre" />
+                                <span asp-validation-for="@Model.Contact.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Apellido Paterno</label>
+                                <input asp-for="@Model.Contact.LastName" class="form-control" placeholder="Ingresa el apellido paterno" />
+                                <span asp-validation-for="@Model.Contact.LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Apellido Materno</label>
+                                <input asp-for="@Model.Contact.MotherLastName" class="form-control font-weight-bold" placeholder="Ingresa el apellido materno" />
+                                <span asp-validation-for="@Model.Contact.MotherLastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Fecha Programada</label>
+                                <input asp-for="@Model.ScheduledDate" class="form-control" placeholder="Ingresa el celular" oninput="this.value = this.value.replace(/[^0-9]/g,'')" />
+                                <span asp-validation-for="@Model.ScheduledDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Fecha de vacuna</label>
+                                <input asp-for="@Model.ApplicationDate" class="form-control font-weight-bold" />
+                                <span asp-validation-for="@Model.ApplicationDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <div class="row justify-content-center">
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-warning d-block mx-auto fw-bold">
+                                    Registrar
+                                </button>
+                            </div>
+                            <div class="col-auto">
+                                <a href="@Url.Action("Index", "Home")" class="btn btn-danger fw-bold">Volver</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>*@

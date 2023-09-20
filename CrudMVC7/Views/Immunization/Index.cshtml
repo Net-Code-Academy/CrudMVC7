@@ -1,65 +1,45 @@
-﻿
-@model IEnumerable<Contact>
+﻿@model IEnumerable<Immunization>
 @{
     ViewData["Title"] = "Home Page";
 }
 <br />
-<div class="container-fluid mb-2">
-    <div class="row justify-content-end">
-        <div class="col-auto">
-            <a asp-action="Create" asp-controller="Home" class="btn btn-primary"><i class="fa-solid fa-id-card-clip"></i>Nuevo Usuario</a>
-        </div>
-        <div class="col-auto">
-            <button type="button" class="btn btn-success" title="Exportar a Excel" id="btnExport" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                <i class="fa-solid fa-file-csv"></i>
-            </button>
-        </div>
-        <div class="col-auto">
-            <button type="button" class="btn btn-danger" title="Exportar a PDF" id="btnExportPDF" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                <i class="fa-regular fa-file-pdf"></i>
-            </button>
-        </div>        
-    </div>
-</div>
-
 <div class="row">
     <div class="col-12">
         <div class="card border">
-            <div class="card-header">
-                <h3><strong>Lista de pacientes</strong></h3>
+            <div class="card-header bg-dark">
+                <h3 class="text-white text-center">
+                    <strong>Listado de Vacunas</strong>
+                </h3>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                <button type="button" class="btn btn-success" title="Exportar a Excel" id="btnExportExcel" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                    <i class="fa-solid fa-file-csv"></i> Exportar en Excel
+                </button>
             </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 @if (Model.Count() > 0)
                 {
-                    <table class="table table-striped" id="tablaUsuarios" width="100%" cellspacing="0">
+                    <table class="table table-striped" id="tablaVacunas" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Código</th>
+                                <th>@Html.DisplayNameFor(m => m.ImmunizationId)</th>
                                 <th>@Html.DisplayNameFor(m => m.Name)</th>
-                                <th>@Html.DisplayNameFor(m => m.LastName)</th>
-                                <th>@Html.DisplayNameFor(m => m.MotherLastName)</th>
-                                <th>@Html.DisplayNameFor(m => m.MobilePhone)</th>
-                                <th>@Html.DisplayNameFor(m => m.Direccion)</th>
-                                <th>Acciones</th>
+                                <th>@Html.DisplayNameFor(m => m.Period)</th>
+                                <th>Descripción</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var contact in Model)
+                            @foreach (var immunization in Model)
                             {
                                 <tr>
-                                    <td>@Html.DisplayFor(m => contact.ContactId)</td>
-                                    <td>@Html.DisplayFor(m => contact.Name)</td>
-                                    <td>@Html.DisplayFor(m => contact.LastName)</td>
-                                    <td>@Html.DisplayFor(m => contact.MotherLastName)</td>
-                                    <td>@Html.DisplayFor(m => contact.MobilePhone)</td>
-                                    <td>@Html.DisplayFor(m => contact.Direccion)</td>
-                                    <td>
-                                        <a class="btn btn-warning" title="Editar" asp-action="Edit" asp-route-id="@contact.ContactId"><i class="fa-solid fa-user-pen"></i></a>
-                                        <a class="btn btn-info" title="Ver detalle" asp-action="Detail" asp-route-id="@contact.ContactId"><i class="fas fa-eye"></i></a>
-                                        <a class="btn btn-danger" title="Eliminar" asp-action="Delete" asp-route-id="@contact.ContactId"><i class="far fa-trash-alt"></i></a>
-                                    </td>
+                                    <td>@Html.DisplayFor(m => immunization.ImmunizationId)</td>
+                                    <td>@Html.DisplayFor(m => immunization.Name)</td>
+                                    <td>@Html.DisplayFor(m => immunization.Period) meses</td>
+                                    <td>@Html.DisplayFor(m => immunization.Description)</td>
                                 </tr>
                             }
                         </tbody>
@@ -79,7 +59,7 @@
     <script>
         $(document).ready(function () {
             //Llamar a datatable
-            $('#tablaUsuarios').DataTable({
+            $('#tablaVacunas').DataTable({
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",
@@ -104,17 +84,19 @@
         });
     </script>
     <script>
+
         $(document).ready(function () {
-            $("#btnExport").click(function () {
+            $("#btnExportExcel").click(function () {
+                debugger;
                 // Obtener la tabla
-                let table = document.getElementById("tablaUsuarios");
+                let table = document.getElementById("tablaVacunas");
 
                 // Crear una tabla vacía para almacenar los valores que deseamos exportar
                 let exportTable = document.createElement("table");
                 exportTable.innerHTML = table.innerHTML;
 
                 // Indicamos el indice de la columna que no queremos exportar
-                let columnasEliminar = [6]; 
+                let columnasEliminar = [6];
 
                 // Eliminamos la columna indicada
                 for (let i = columnasEliminar.length - 1; i >= 0; i--) {
@@ -126,9 +108,9 @@
 
                 // Utilizar TableToExcel para exportar la tabla modificada
                 TableToExcel.convert(exportTable, {
-                    name: `Pacientes.xlsx`,
+                    name: `UserManagement.xlsx`,
                     sheet: {
-                        name: 'listado'
+                        name: 'Usermanagement'
                     }
                 });
             });
@@ -142,7 +124,7 @@
                 var doc = new jsPDF();
 
                 // Obtener el contenido HTML que deseas exportar
-                var contenidoHtml = $("#tablaUsuarios").html();
+                var contenidoHtml = $("#tablaVacunas").html();
 
                 // Agregar el contenido HTML al PDF
                 doc.fromHTML(contenidoHtml, 15, 15);

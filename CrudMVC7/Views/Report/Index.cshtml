@@ -1,0 +1,60 @@
+﻿@model Contact;
+@{
+    ViewData["Title"] = "Crear paciente";
+}
+<div class="row">
+    <div class="offset-12">
+        <div class="card border">
+            <div class="card-header bg-success">
+                <h3 class="text-white text-center">
+                    <strong>Generar reportes</strong>
+                </h3>
+            </div>
+            <div class="card-body">
+                <form asp-action="Generate" method="post">
+                    <div asp-asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Desde</label>
+                                <input asp-for="BirthDate" name="desde" class="form-control font-weight-bold" />
+                                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Hasta</label>
+                                <input asp-for="BirthDate" name="hasta" class="form-control font-weight-bold" />
+                                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="control-label fw-bold">Estado</label>
+                                <select class="form-select" name="estado" aria-label="Default select example">
+                                    <option selected>Seleccione una opción</option>
+                                    <option value="pendiente">Pendiente</option>
+                                    <option value="vacunado">Vacunado</option>
+                                    <option value="hoy">Hoy</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <label class="control-label fw-bold"></label>
+                            <button type="submit" class="btn btn-success d-block mx-auto">
+                                Generar Reporte
+                            </button>
+                        </div>
+                    </div>
+                    <br />
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>

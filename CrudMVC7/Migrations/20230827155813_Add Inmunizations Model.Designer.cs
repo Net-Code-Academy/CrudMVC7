@@ -4,6 +4,7 @@ using CrudMVC7.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrudMVC7.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230827155813_Add Inmunizations Model")]
+    partial class AddInmunizationsModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace CrudMVC7.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Direccion")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -84,68 +87,6 @@ namespace CrudMVC7.Migrations
                     b.HasKey("ImmunizationId");
 
                     b.ToTable("Immunizations");
-                });
-
-            modelBuilder.Entity("CrudMVC7.Models.ImmunizationPatient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("ApplicationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ContactId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ImmunizationId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ScheduledDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContactId");
-
-                    b.HasIndex("ImmunizationId");
-
-                    b.ToTable("ImmunizationPatients");
-                });
-
-            modelBuilder.Entity("CrudMVC7.Models.ImmunizationPatient", b =>
-                {
-                    b.HasOne("CrudMVC7.Models.Contact", "Contact")
-                        .WithMany("ImmunizationPatients")
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CrudMVC7.Models.Immunization", "Immunization")
-                        .WithMany("ImmunizationPatients")
-                        .HasForeignKey("ImmunizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contact");
-
-                    b.Navigation("Immunization");
-                });
-
-            modelBuilder.Entity("CrudMVC7.Models.Contact", b =>
-                {
-                    b.Navigation("ImmunizationPatients");
-                });
-
-            modelBuilder.Entity("CrudMVC7.Models.Immunization", b =>
-                {
-                    b.Navigation("ImmunizationPatients");
                 });
 #pragma warning restore 612, 618
         }
